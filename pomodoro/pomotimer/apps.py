@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class PromotimerConfig(AppConfig):
+class PomotimerConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
-    name = "promotimer"
+    name = "pomotimer"
