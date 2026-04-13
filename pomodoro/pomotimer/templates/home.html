@@ -160,8 +160,9 @@ Pomodoro Timer – Boost Focus & Productivity | Free Online Tool
         </div><!-- Tasks sidebar -->
         <div class="col-md-4 tasks-sidebardd fade-ddin" style="animation-delay:0.5s;">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="mb-0">📋 Tasks</h5><button id="addTaskBtn" class="btn-icon" aria-label="Add task"> <i
-                        data-lucide="plus" style="width:18px;height:18px;"></i>
+                <h5 class="mb-0">📋 Tasks</h5>
+                <button id="addTaskBtn" class="btn-icon" aria-label="Add task"> <i data-lucide="plus"
+                        style="width:18px;height:18px;"></i>
                 </button>
             </div>
             <div id="taskInputUpdate" class="d-none mb-3 p-2"
@@ -185,10 +186,17 @@ Pomodoro Timer – Boost Focus & Productivity | Free Online Tool
                         onclick="cancelAddTask()">Cancel</button>
                 </div>
             </div>
-            <div class="d-flex justify-content-between align-items-center mb-2 position-relative"><span
-                    class="small opacity-60" id="taskCount">0 tasks</span> <button id="taskMenuBtn" class="btn-icon"
-                    aria-label="Task menu" title="Menu"> <i data-lucide="more-vertical"
-                        style="width:16px;height:16px;"></i> </button>
+            <div class="d-flex justify-content-between align-items-center mb-2 position-relative">
+                <div>
+                    <span class="small opacity-60" id="taskCount">0 tasks</span>
+                    <button onclick="exportBtn()" class="btn-icon" aria-label="Export tasks" title="Export Tasks">
+                        <i data-lucide="download" style="width:16px;height:16px;color: #f97316;"></i> </button>
+                </div>
+
+                <button id="taskMenuBtn" class="btn-icon" aria-label="Task menu" title="Menu"> <i
+                        data-lucide="more-vertical" style="width:16px;height:16px;"></i> </button>
+
+
             </div>
             <div id="taskMenu" class="d-none position-absolute p-2 rounded shadow-sm"
                 style="width:200px;z-index:1050;min-width:200px;">
@@ -1050,6 +1058,57 @@ Pomodoro Timer – Boost Focus & Productivity | Free Online Tool
     updateDisplay();
     renderTasks();
     lucide.createIcons();
+
+
+
+
+function exportBtn(){
+    // const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(tasks));
+    // const dlAnchorElem = document.createElement('a');
+    // dlAnchorElem.setAttribute("href", dataStr);
+    // dlAnchorElem.setAttribute("download", "pomodoro_tasks.json");
+    // document.body.appendChild(dlAnchorElem); // required for firefox
+    // dlAnchorElem.click();
+    // dlAnchorElem.remove();
+
+    // 1. Gather data from localStorage
+    let csvRows = ['Task,Completed,Pomodoros']; // Header row
+    pomodoTasks = JSON.parse(localStorage.getItem('pomodoroTasks') || '[]');
+    if (pomodoTasks.length > 0) {
+        pomodoTasks.forEach((task, index) => {
+            // Handle commas & quotes safely
+            const title = `"${(task.title || '').replace(/"/g, '""')}"`;
+            const completed = task.completed ? 'Yes' : 'No';
+            const pomodoros = task.pomodoros ?? 0;
+
+            csvRows.push(`${title},${completed},${pomodoros}`);
+        });
+
+        // 2. Create the CSV string
+        const csvString = csvRows.join('\n');
+
+        // 3. Create a Blob and download link
+        const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+
+        link.setAttribute('href', url);
+        link.setAttribute('download', 'www.pomodorotimer.live_tasks.csv');
+        link.style.visibility = 'hidden';
+
+        // 4. Trigger the download
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    else 
+    {
+        alert('No tasks found to export!');
+    }
+
+    
+}
 </script>
 </body>
 {% endblock %}
