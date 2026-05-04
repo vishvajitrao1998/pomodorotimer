@@ -25,7 +25,7 @@ SECRET_KEY = "django-insecure-57rvw-b822x4&p+ab1!=dpva8g(1%=9s+g^!qc1y6wo0l&-f*r
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['pomodorotimer.live', 'www.pomodorotimer.live', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['pomodorotimer.live', 'www.pomodorotimer.live']
 
 
 # Application definition
